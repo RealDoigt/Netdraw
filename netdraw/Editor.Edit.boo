@@ -322,6 +322,13 @@ static partial class Editor:
 				Console.CursorLeft = x + DIFFERENCE_X
 				
 				Draw()
+				
+	private def GetSpaceOnNoTexture(texture as char):
+		
+		if texture == char('\0'):
+			return char(' ')
+			
+		return texture
 		
 	private def Draw():
 		
@@ -343,17 +350,17 @@ static partial class Editor:
 			Console.ForegroundColor = originalPixel.foreground
 			
 		elif currentColorMode == ColorModes.NoTexture:
-			texture = originalPixel.texture
+			texture = GetSpaceOnNoTexture(originalPixel.texture)
 			
 		elif currentColorMode == ColorModes.NoTextureFore:
 			
 			Console.BackgroundColor = originalPixel.background
-			texture = originalPixel.texture
+			texture = GetSpaceOnNoTexture(originalPixel.texture)
 			
 		elif currentColorMode == ColorModes.NoTextureBack:
 			
 			Console.ForegroundColor = originalPixel.foreground
-			texture = originalPixel.texture
+			texture = GetSpaceOnNoTexture(originalPixel.texture)
 			
 		currentPicture.SetPixel(x, y, texture)
 		Console.Write(texture)
