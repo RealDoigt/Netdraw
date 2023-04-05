@@ -10,7 +10,7 @@ public struct Pixel:
 	public background as ConsoleColor
 	public texture as char
 	
-enum CharEncoding(byte):
+enum CharEncoding:
 	ASCII
 	DCII
 	UTF8
@@ -113,6 +113,16 @@ class Picture:
 			
 		Directory.Delete(TEMP_DIR)
 		
+	private def GetBitSize(val as int) as byte:
+		
+		if val > ushort.MaxValue:
+			return 2 # 32-bit
+			
+		if val > byte.MaxValue:
+			return 1 # 16-bit
+			
+		return 0 # 8-bit
+		
 	def constructor(fileName as string):
 		
 		if fileName.EndsWith(".ndi"):
@@ -146,16 +156,6 @@ class Picture:
 	
 			DeleteTemp() # -4 for the file extension
 			previousName = fileName[0:fileName.Length - 4]
-			
-	private def GetBitSize(int val) as byte:
-		
-		if val > ushort.MaxValue:
-			return 2 # 32-bit
-			
-		if val > byte.MaxValue:
-			return 1 # 16-bit
-			
-		return 0 # 8-bit
 		
 	def constructor(width as int, height as int):
 		
@@ -165,6 +165,9 @@ class Picture:
 		
 		self.width = width
 		self.height = height
+		
+	def Save(fileName as string):
+		Save(fileName, CharEncoding.ASCII)
 	
 	/*
 		Saves a compressed image using RLE with the following properties:
@@ -193,9 +196,8 @@ class Picture:
 			
 		buffer = List[of byte]
 		
-		sizes as byte = encoding << 4
-		
-		
+		sizes as byte = encoding cast byte << 4
+		sizes |= 1
 			
 		
 	def SaveAsZip(fileName as string):
