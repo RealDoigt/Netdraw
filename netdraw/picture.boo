@@ -113,7 +113,7 @@ class Picture:
 			
 		Directory.Delete(TEMP_DIR)
 		
-	private def GetBitSize(val as int) as byte:
+	private static def GetBitSize(val as int) as byte:
 		
 		if val > ushort.MaxValue:
 			return 2 # 32-bit
@@ -122,6 +122,12 @@ class Picture:
 			return 1 # 16-bit
 			
 		return 0 # 8-bit
+		
+	private static def AddVariableByteQTY(list as List[of byte], val as int, size as byte):
+		
+		if size == 0:
+			
+		pass
 		
 	def constructor(fileName as string):
 		
@@ -195,7 +201,6 @@ class Picture:
 			File.Delete(filePath)
 			
 		buffer = List[of byte]
-		
 		header as byte = encoding cast byte << 4
 		
 		heightSize = GetBitSize(height)
@@ -205,6 +210,9 @@ class Picture:
 		header |= widthSize
 		
 		buffer.Add(header)
+		
+		for color in Encrypt(foreground):
+			buffer.Add(color)
 			
 		
 	def SaveAsZip(fileName as string):
