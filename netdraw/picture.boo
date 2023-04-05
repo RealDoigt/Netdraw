@@ -196,8 +196,15 @@ class Picture:
 			
 		buffer = List[of byte]
 		
-		sizes as byte = encoding cast byte << 4
-		sizes |= 1
+		header as byte = encoding cast byte << 4
+		
+		heightSize = GetBitSize(height)
+		header |= heightSize << 2
+		
+		widthSize = GetBitSize(width)
+		header |= widthSize
+		
+		buffer.Add(header)
 			
 		
 	def SaveAsZip(fileName as string):
