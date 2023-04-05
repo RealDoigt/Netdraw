@@ -109,32 +109,37 @@ class Picture:
 		
 	def constructor(fileName as string):
 		
-		Directory.CreateDirectory(TEMP_DIR)
-		ZipFile.ExtractToDirectory("$IMG_DIR/$fileName", TEMP_DIR)
+		if fileName.EndsWith(".ndi"):
+			pass
 		
-		size = File.ReadAllBytes(FILES[0])
-		
-		width = (size[0] << 24) | (size[1] << 16) | (size[2] << 8) | size[3]
-		height = (size[4] << 24) | (size[5] << 16) | (size[6] << 8) | size[7]
-		
-		foreground = Decrypt(File.ReadAllBytes(FILES[1]))
-		background = Decrypt(File.ReadAllBytes(FILES[2]))
-
-		x = 0
-		y = 0
-		
-		texture = matrix(char, height, width)
-		
-		for c in File.ReadAllText(FILES[3]).ToCharArray():
+		elif fileName.EndsWith(".ndz"):
 			
-			texture[y, x] = c
+			Directory.CreateDirectory(TEMP_DIR)
+			ZipFile.ExtractToDirectory("$IMG_DIR/$fileName", TEMP_DIR)
 			
-			if ++x == width:
-				x = 0
-				++y
-
-		DeleteTemp() # -4 for the file extension
-		previousName = fileName[0:fileName.Length - 4]
+			size = File.ReadAllBytes(FILES[0])
+			
+			width = (size[0] << 24) | (size[1] << 16) | (size[2] << 8) | size[3]
+			height = (size[4] << 24) | (size[5] << 16) | (size[6] << 8) | size[7]
+			
+			foreground = Decrypt(File.ReadAllBytes(FILES[1]))
+			background = Decrypt(File.ReadAllBytes(FILES[2]))
+	
+			x = 0
+			y = 0
+			
+			texture = matrix(char, height, width)
+			
+			for c in File.ReadAllText(FILES[3]).ToCharArray():
+				
+				texture[y, x] = c
+				
+				if ++x == width:
+					x = 0
+					++y
+	
+			DeleteTemp() # -4 for the file extension
+			previousName = fileName[0:fileName.Length - 4]
 		
 	def constructor(width as int, height as int):
 		
@@ -144,10 +149,31 @@ class Picture:
 		
 		self.width = width
 		self.height = height
+	
+	/*
+		Saves a compressed image using RLE with the following properties:
 		
+		8-bit header: tells how many bits the height and width takes
+		x-bit width: says how large the image is where x is the size specified in the header
+		x-bit height: says how long the image is where x is the size specified in the header
+		8-bit width * height data chunk: colors of each foreground pixel
+	*/
 	def Save(fileName as string):
 		
 		filePath = "$IMG_DIR/$(fileName).ndi"
+		
+		Directory.CreateDirectory(TEMP_DIR)
+		
+		if not Directory.Exists(IMG_DIR):
+			Directory.CreateDirectory(IMG_DIR)
+			
+		if File.Exists(filePath):
+			File.Delete(filePath)
+			
+		
+	def SaveAsZip(fileName as string):
+		
+		filePath = "$IMG_DIR/$(fileName).ndz"
 		
 		Directory.CreateDirectory(TEMP_DIR)
 		
