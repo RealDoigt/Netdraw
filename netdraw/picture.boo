@@ -153,10 +153,17 @@ class Picture:
 	/*
 		Saves a compressed image using RLE with the following properties:
 		
-		8-bit header: tells how many bits the height and width takes
-		x-bit width: says how large the image is where x is the size specified in the header
-		x-bit height: says how long the image is where x is the size specified in the header
-		8-bit width * height data chunk: colors of each foreground pixel
+		8-bit header: defines the bit sizes of the height and width, also defines a char
+			- 0 is 8 bits / extended ascii
+			- 1 is 16 bits / dcii
+			- 2 is 32 bits / utf-8
+			- 3 utf-16
+			- from the right, width is the first bit pair and the height is the second
+		x-bit width: how large the image is where x is the size specified in the header
+		y-bit height: how long the image is where y is the size specified in the header
+		8-bit width * height data chunk: colour of each foreground pixel
+		8-bit width * height data chunk: colour of each background pixel
+		z-bit width * height data chunk: character code point of each foreground pixel
 	*/
 	def Save(fileName as string):
 		
