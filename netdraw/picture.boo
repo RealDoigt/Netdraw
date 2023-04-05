@@ -9,6 +9,12 @@ public struct Pixel:
 	public foreground as ConsoleColor
 	public background as ConsoleColor
 	public texture as char
+	
+enum CharEncoding(byte):
+	ASCII
+	DCII
+	UTF8
+	UTF16
 
 class Picture:
 	
@@ -169,13 +175,14 @@ class Picture:
 		
 		filePath = "$IMG_DIR/$(fileName).ndi"
 		
-		Directory.CreateDirectory(TEMP_DIR)
-		
 		if not Directory.Exists(IMG_DIR):
 			Directory.CreateDirectory(IMG_DIR)
 			
 		if File.Exists(filePath):
 			File.Delete(filePath)
+			
+		buffer = List[of byte]
+		sizes = 
 			
 		
 	def SaveAsZip(fileName as string):
