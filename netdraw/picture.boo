@@ -146,6 +146,16 @@ class Picture:
 	
 			DeleteTemp() # -4 for the file extension
 			previousName = fileName[0:fileName.Length - 4]
+			
+	private def GetBitSize(int val) as byte:
+		
+		if val > ushort.MaxValue:
+			return 2 # 32-bit
+			
+		if val > byte.MaxValue:
+			return 1 # 16-bit
+			
+		return 0 # 8-bit
 		
 	def constructor(width as int, height as int):
 		
@@ -171,7 +181,7 @@ class Picture:
 		8-bit width * height data chunk: colour of each background pixel
 		z-bit width * height data chunk: character code point of each foreground pixel
 	*/
-	def Save(fileName as string):
+	def Save(fileName as string, encoding as CharEncoding):
 		
 		filePath = "$IMG_DIR/$(fileName).ndi"
 		
@@ -182,7 +192,10 @@ class Picture:
 			File.Delete(filePath)
 			
 		buffer = List[of byte]
-		sizes = 
+		
+		sizes as byte = encoding << 4
+		
+		
 			
 		
 	def SaveAsZip(fileName as string):
