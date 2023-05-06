@@ -126,8 +126,7 @@ class Picture:
 	private static def AddVariableByteQTY(list as List[of byte], val as int, size as byte):
 		
 		if size == 0:
-			
-		pass
+			pass
 		
 	def constructor(fileName as string):
 		
@@ -191,7 +190,7 @@ class Picture:
 		z-bit width * height data chunk: character code point of each foreground pixel
 	*/
 	def Save(fileName as string, encoding as CharEncoding):
-		
+		/*
 		filePath = "$IMG_DIR/$(fileName).ndi"
 		
 		if not Directory.Exists(IMG_DIR):
@@ -212,8 +211,8 @@ class Picture:
 		buffer.Add(header)
 		
 		for color in Encrypt(foreground):
-			buffer.Add(color)
-			
+			buffer.Add(color)*/
+			pass
 		
 	def SaveAsZip(fileName as string):
 		
