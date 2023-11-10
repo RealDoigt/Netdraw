@@ -133,35 +133,6 @@ class Picture:
 		if fileName.EndsWith(".ndi"):
 			pass
 		
-		elif fileName.EndsWith(".ndz"):
-			
-			Directory.CreateDirectory(TEMP_DIR)
-			ZipFile.ExtractToDirectory("$IMG_DIR/$fileName", TEMP_DIR)
-			
-			size = File.ReadAllBytes(FILES[0])
-			
-			width = (size[0] << 24) | (size[1] << 16) | (size[2] << 8) | size[3]
-			height = (size[4] << 24) | (size[5] << 16) | (size[6] << 8) | size[7]
-			
-			foreground = Decrypt(File.ReadAllBytes(FILES[1]))
-			background = Decrypt(File.ReadAllBytes(FILES[2]))
-	
-			x = 0
-			y = 0
-			
-			texture = matrix(char, height, width)
-			
-			for c in File.ReadAllText(FILES[3]).ToCharArray():
-				
-				texture[y, x] = c
-				
-				if ++x == width:
-					x = 0
-					++y
-	
-			DeleteTemp() # -4 for the file extension
-			previousName = fileName[0:fileName.Length - 4]
-		
 	def constructor(width as int, height as int):
 		
 		foreground = matrix(ConsoleColor, height, width)
@@ -190,28 +161,7 @@ class Picture:
 		z-bit width * height data chunk: character code point of each foreground pixel
 	*/
 	def Save(fileName as string, encoding as CharEncoding):
-		/*
-		filePath = "$IMG_DIR/$(fileName).ndi"
 		
-		if not Directory.Exists(IMG_DIR):
-			Directory.CreateDirectory(IMG_DIR)
-			
-		if File.Exists(filePath):
-			File.Delete(filePath)
-			
-		buffer = List[of byte]
-		header as byte = encoding cast byte << 4
-		
-		heightSize = GetBitSize(height)
-		header |= heightSize << 2
-		
-		widthSize = GetBitSize(width)
-		header |= widthSize
-		
-		buffer.Add(header)
-		
-		for color in Encrypt(foreground):
-			buffer.Add(color)*/
 			pass
 		
 	def Print():
