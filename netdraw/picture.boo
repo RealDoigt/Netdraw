@@ -149,9 +149,9 @@ class Picture:
 		Saves a compressed image using RLE with the following properties:
 		
 		8-bit header: defines the bit sizes of the height and width, also defines a char
-			- 0 is 8 bits / extended ascii
-			- 1 is 16 bits / dcii
-			- 2 is 32 bits / utf-8
+			- 0 custom
+			- 1 dcii
+			- 2 utf-8
 			- 3 utf-16
 			- from the right, width is the first bit pair and the height is the second
 		x-bit width: how large the image is where x is the size specified in the header
