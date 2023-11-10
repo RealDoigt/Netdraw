@@ -214,28 +214,6 @@ class Picture:
 			buffer.Add(color)*/
 			pass
 		
-	def SaveAsZip(fileName as string):
-		
-		filePath = "$IMG_DIR/$(fileName).ndz"
-		
-		Directory.CreateDirectory(TEMP_DIR)
-		
-		if not Directory.Exists(IMG_DIR):
-			Directory.CreateDirectory(IMG_DIR)
-			
-		if File.Exists(filePath):
-			File.Delete(filePath)
-		
-		File.WriteAllBytes(FILES[0], SplitInt(width).Extend(SplitInt(height)).ToArray())
-		File.WriteAllBytes(FILES[1], Encrypt(foreground))
-		File.WriteAllBytes(FILES[2], Encrypt(background))
-		
-		File.WriteAllText(FILES[3], string(Flatten(texture)))
-		ZipFile.CreateFromDirectory(TEMP_DIR, filePath)
-		
-		DeleteTemp()
-		previousName = fileName
-		
 	def Print():
 		
 		prevFG = Console.ForegroundColor
