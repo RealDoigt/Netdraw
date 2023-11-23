@@ -123,11 +123,6 @@ class Picture:
 			
 		return 0 # 8-bit
 		
-	private static def AddVariableByteQTY(list as List[of byte], val as int, size as byte):
-		
-		if size == 0:
-			pass
-		
 	def constructor(fileName as string):
 		
 		if fileName.EndsWith(".ndi"):
@@ -205,7 +200,11 @@ class Picture:
 		else:
 			bytes.Add(width cast byte)
 		# END: IMAGE SIZE
-			
+		
+		bytes.Extend(Encrypt(foreground))
+		bytes.Extend(Encrypt(background))
+		bytes.Extend(Flatten(texture))
+		
 	def Print():
 		
 		prevFG = Console.ForegroundColor
