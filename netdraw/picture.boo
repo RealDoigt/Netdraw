@@ -143,17 +143,18 @@ class Picture:
 		self.height = height
 		
 	def Save(fileName as string):
-		Save(fileName, CharEncoding.ASCII)
+		Save(fileName, CharEncoding.UTF16)
 	
 	/*
 		Saves a compressed image using RLE with the following properties:
 		
-		8-bit header: defines the bit sizes of the height and width, also defines a char
+		8-bit header: defines the bit sizes of the height and width, also defines a char encoding
 			- 0 custom
 			- 1 dcii
 			- 2 utf-8
 			- 3 utf-16
 			- from the right, width is the first bit pair and the height is the second
+		after the header:
 		x-bit width: how large the image is where x is the size specified in the header
 		y-bit height: how long the image is where y is the size specified in the header
 		8-bit width * height data chunk: colour of each foreground pixel
@@ -162,8 +163,26 @@ class Picture:
 	*/
 	def Save(fileName as string, encoding as CharEncoding):
 		
-			pass
+		# BEGIN: HEADER
+		bytes = List[of byte]()
 		
+		header as byte = encoding cast byte << 4
+		
+		if height > byte.MaxValue:
+			header |= 2 << 2
+		
+		else:
+			header |= 1 << 1
+			
+		if width > byte.MaxValue:
+			header |= 2
+			
+		else:
+			header |= 1
+			
+		bytes.Add(header)
+		# END: HEADER
+			
 	def Print():
 		
 		prevFG = Console.ForegroundColor
