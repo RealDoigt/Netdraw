@@ -155,33 +155,56 @@ class Picture:
 			- 3 utf-16
 			- from the right, width is the first bit pair and the height is the second
 		after the header:
-		x-bit width: how large the image is where x is the size specified in the header
 		y-bit height: how long the image is where y is the size specified in the header
+		x-bit width: how large the image is where x is the size specified in the header
 		8-bit width * height data chunk: colour of each foreground pixel
 		8-bit width * height data chunk: colour of each background pixel
 		z-bit width * height data chunk: character code point of each foreground pixel
 	*/
 	def Save(fileName as string, encoding as CharEncoding):
 		
-		# BEGIN: HEADER
 		bytes = List[of byte]()
 		
+		# BEGIN: HEADER
 		header as byte = encoding cast byte << 4
+		byteSizeHeight as byte
+		byteSizeWidth as byte
 		
 		if height > byte.MaxValue:
-			header |= 2 << 2
+			byteSizeHeight = 2 
 		
 		else:
-			header |= 1 << 1
+			byteSizeHeight = 1
+			
+		header |= byteSizeHeight << 2
 			
 		if width > byte.MaxValue:
-			header |= 2
+			byteSizeWidth = 2 
 			
 		else:
-			header |= 1
+			byteSizeWidth = 2
+			
+		header |= byteSizeWidth
 			
 		bytes.Add(header)
 		# END: HEADER
+		# BEGIN: IMAGE SIZE
+		if byteSizeHeight > 1:
+			
+			bytes.Add(height >> 8 cast byte)
+			bytes.Add(height & 63 cast byte)
+			
+		else:
+			bytes.Add(height cast byte)
+			
+		if byteSizeWidth > 1:
+			
+			bytes.Add(width >> 8 cast byte)
+			bytes.Add(width & 63 cast byte)
+			
+		else:
+			bytes.Add(width cast byte)
+		# END: IMAGE SIZE
 			
 	def Print():
 		
